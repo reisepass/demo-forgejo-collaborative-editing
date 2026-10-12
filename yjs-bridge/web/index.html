@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Live markdown editor (experiment)</title>
+    <!--CONFIG-->
+    <script>
+      // The document is asked for before the editor code has loaded, so the text can be on screen
+      // as soon as both are there. The websocket comes afterwards.
+      (function () {
+        var cfg = window.__LB || {};
+        var base = cfg.base || '';
+        var cookie = cfg.auth === 'forgejo';
+        var m = location.pathname.slice(base.length).match(/^\/r\/([^/]+)\/([^/]+)\/edit\/(.+)$/);
+        var t = null;
+        try { t = localStorage.getItem('lb.token'); } catch (e) {}
+        if (!m || (!t && !cookie)) return;
+        var file = m[3].split('/').map(decodeURIComponent).join('/');
+        window.__pre = {
+          key: decodeURIComponent(m[1]) + '/' + decodeURIComponent(m[2]) + '/' + file,
+          t0: performance.now(),
+          p: fetch(base + '/api/r/' + m[1] + '/' + m[2] + '/state?path=' + encodeURIComponent(file), cookie ? {} : { headers: { Authorization: 'Bearer ' + t } }).then(function (r) {
+            return r.arrayBuffer().then(function (b) { return { status: r.status, room: r.headers.get('x-room'), body: b, at: performance.now() }; });
+          }),
+        };
+      })();
+    </script>
+    <!--ASSETS-->
+  </head>
+  <body class="lb-page">
+    <div id="app" class="lb"></div>
+  </body>
+</html>

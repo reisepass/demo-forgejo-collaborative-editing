@@ -1,0 +1,39 @@
+{
+  "name": "yjs-git-bridge-demo",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Demo: live collaborative markdown editing over git-tracked files. One service: editor, Yjs rooms, git bridge.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "node web/build.js",
+    "serve": "node bin/serve.js",
+    "test": "node --test --test-concurrency=1 test/core.test.js",
+    "test:core": "node --test --test-concurrency=1 test/core.test.js",
+    "test:crash": "node --test test/crash.test.js",
+    "test:browser": "playwright test",
+    "soak": "node test/soak.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@codemirror/lang-markdown": "^6.5.2",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.14",
+    "codemirror": "^6.0.2",
+    "commander": "^15.0.0",
+    "dompurify": "^3.4.16",
+    "lib0": "^0.2.119",
+    "markdown-it": "^15.0.2",
+    "winston": "^3.19.0",
+    "ws": "^8.22.0",
+    "y-codemirror.next": "^0.3.6",
+    "y-protocols": "^1.0.7",
+    "yjs": "^13.6.33"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "esbuild": "^0.28.2"
+  }
+}

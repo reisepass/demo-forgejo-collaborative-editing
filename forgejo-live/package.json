@@ -1,0 +1,22 @@
+{
+  "name": "forgejo-live-demo",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Live collaborative markdown editing inside a self-hosted Forgejo, without a fork: configuration, proxy, start scripts and end-to-end tests.",
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "up": "sh scripts/up.sh",
+    "down": "sh scripts/down.sh",
+    "test": "playwright test"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}

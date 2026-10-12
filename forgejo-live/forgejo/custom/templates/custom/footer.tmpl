@@ -1,0 +1,4 @@
+{{/* Live editing: the whole integration on Forgejo's side. The script is served by the editor
+     service (behind the same reverse proxy), so it changes with the service, not with Forgejo.
+     When the service is down the request fails and Forgejo's pages are simply unchanged. */}}
+<script type="module" src="{{AppSubUrl}}/live/embed.js"></script>

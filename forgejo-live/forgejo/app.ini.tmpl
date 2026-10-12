@@ -1,0 +1,77 @@
+; Forgejo configuration of the live-editing prototype. Written to <home>/forgejo/custom/conf/app.ini
+; by scripts/up.mjs with the {{...}} places filled in. The lines marked LIVE are the ones the
+; integration needs; everything else is an ordinary small single-machine setup.
+APP_NAME = Handbook Forge
+RUN_MODE = prod
+WORK_PATH = {{WORK}}
+
+[server]
+PROTOCOL = http
+HTTP_ADDR = 127.0.0.1
+HTTP_PORT = {{FORGEJO_PORT}}
+DOMAIN = 127.0.0.1
+; LIVE: the address people use is the reverse proxy, which also carries the editor under /live/
+ROOT_URL = {{PUBLIC_URL}}/
+LOCAL_ROOT_URL = http://127.0.0.1:{{FORGEJO_PORT}}/
+DISABLE_SSH = true
+START_SSH_SERVER = false
+OFFLINE_MODE = true
+LFS_START_SERVER = false
+
+[database]
+DB_TYPE = sqlite3
+PATH = {{WORK}}/data/forgejo.db
+
+[repository]
+ROOT = {{WORK}}/repositories
+DEFAULT_BRANCH = main
+
+[security]
+INSTALL_LOCK = true
+SECRET_KEY = {{SECRET_KEY}}
+INTERNAL_TOKEN = {{INTERNAL_TOKEN}}
+; DISABLE_GIT_HOOKS keeps its default (true): the demand-flush hook is a file the administrator
+; puts into the repository's hooks/pre-receive.d/, not a hook edited through the web interface.
+
+[oauth2]
+; LIVE: the OAuth2 provider is what "Sign in with Forgejo" of the editor uses (on by default)
+ENABLED = true
+JWT_SECRET = {{JWT_SECRET}}
+
+[webhook]
+; LIVE: the default (external) refuses to deliver to 127.0.0.1, where the editor service listens
+ALLOWED_HOST_LIST = loopback
+DELIVER_TIMEOUT = 5
+
+; LIVE (optional): a push reaches the webhook through these two queues. Persistent queues (the
+; default) are polled with a back-off of up to 2 s each; in-memory ones hand over at once.
+{{QUEUES}}
+
+[service]
+DISABLE_REGISTRATION = true
+REQUIRE_SIGNIN_VIEW = false
+
+[indexer]
+; code search in Forgejo's own interface (built-in bleve index, off by default)
+REPO_INDEXER_ENABLED = true
+REPO_INDEXER_TYPE = bleve
+REPO_INDEXER_PATH = {{WORK}}/data/indexers/repos.bleve
+
+[session]
+PROVIDER = file
+
+[log]
+MODE = console
+LEVEL = Info
+
+[actions]
+ENABLED = false
+
+[packages]
+ENABLED = false
+
+[cron.update_checker]
+ENABLED = false
+
+[other]
+SHOW_FOOTER_VERSION = true
